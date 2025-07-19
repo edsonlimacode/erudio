@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: erudio
+  datasource:
+    url: jdbc:postgresql://localhost:5432/erudio?useTimezone=true&serverTimezone=UTC
+    username: postgres
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
