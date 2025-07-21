@@ -30,5 +30,4 @@ public class Book {
     @JoinColumn(name = "author_id", nullable = false)
     @JsonBackReference
     private Person person;
-
 }

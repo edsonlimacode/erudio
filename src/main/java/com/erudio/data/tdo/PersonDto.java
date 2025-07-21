@@ -44,7 +44,7 @@ public class PersonDto extends RepresentationModel<PersonDto> {
     @JsonSerialize(using = GenreSerializer.class)
     private String genre;
 
-    @JsonFormat(timezone = "America/Sao_Paulo", pattern = "dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     @JsonProperty("created_at")
     private Date createdAt;
 
