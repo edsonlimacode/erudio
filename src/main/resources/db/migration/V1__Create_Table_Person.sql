@@ -4,8 +4,19 @@ CREATE TABLE IF NOT EXISTS public.persons (
     last_name   VARCHAR(80) NOT NULL,
     age INTEGER NOT NULL,
     genre VARCHAR(20) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
     CONSTRAINT persons_pkey PRIMARY KEY (id)
-)
+);
+
+CREATE TABLE IF NOT EXISTS public.books (
+  id bigserial NOT NULL PRIMARY KEY,
+  author_id bigint NOT NULL,
+  launch_date TIMESTAMP NOT NULL DEFAULT NOW(),
+  price DECIMAL(10,2) NOT NULL,
+  title TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
+  FOREIGN KEY ("author_id") REFERENCES "public"."persons" ("id") ON UPDATE NO ACTION ON DELETE CASCADE
+);
 

@@ -1,5 +1,6 @@
 package com.erudio.data.tdo;
 
+import com.erudio.model.Book;
 import com.erudio.serializer.GenreSerializer;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -45,4 +47,6 @@ public class PersonDto extends RepresentationModel<PersonDto> {
     @JsonFormat(timezone = "America/Sao_Paulo", pattern = "dd/MM/yyyy HH:mm")
     @JsonProperty("created_at")
     private Date createdAt;
+
+    private List<Book> books;
 }

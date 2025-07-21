@@ -1,5 +1,7 @@
 package com.erudio.data.tdo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +17,7 @@ public class BookDto {
     private String title;
 
     @JsonProperty("launch_date")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private Date launchDate;
     private BigDecimal price;
 
