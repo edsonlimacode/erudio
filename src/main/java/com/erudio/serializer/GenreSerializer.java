@@ -14,7 +14,7 @@ public class GenreSerializer extends JsonSerializer<String> {
     @Override
     public void serialize(String value, JsonGenerator generator, SerializerProvider serializerProvider) throws IOException {
 
-        String genreFormated = value.equals("Male") ? "F" : "M";
+        String genreFormated = value.equals("Male") ? "M" : "F";
 
         generator.writeString(genreFormated);
 
