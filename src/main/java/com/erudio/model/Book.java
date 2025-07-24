@@ -9,7 +9,8 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Entity(name = "books")
+@Entity
+@Table(name = "books")
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

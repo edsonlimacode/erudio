@@ -1,16 +1,15 @@
 package com.erudio.service;
 
-import com.erudio.controller.PersonController;
 import com.erudio.exception.exceptions.NotFoundExecption;
 import com.erudio.model.Person;
 import com.erudio.respository.PersonRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class PersonService {
@@ -24,6 +23,10 @@ public class PersonService {
 
     public List<Person> getAll() {
         return personRepository.findAll();
+    }
+
+    public Page<Person> getAllPaginate(Pageable pageable) {
+        return personRepository.findAll(pageable);
     }
 
     public Person findById(Long id) {
@@ -47,5 +50,19 @@ public class PersonService {
         Person person = personRepository.findById(id).orElseThrow(() -> new NotFoundExecption("Person not found!"));
 
         personRepository.delete(person);
+    }
+
+    @Transactional
+    public void disable(Long id) {
+
+        personRepository.findById(id).orElseThrow(() -> new NotFoundExecption("Person not found!"));
+
+        personRepository.disbalePerson(id);
+    }
+
+    @Transactional
+    public void enable(Long id) {
+        var person = personRepository.findById(id).orElseThrow(() -> new NotFoundExecption("Person not found!"));
+        person.setStatus(true);
     }
 }

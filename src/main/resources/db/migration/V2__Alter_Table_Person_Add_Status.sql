@@ -1,0 +1,1 @@
+ALTER TABLE "public"."persons" ADD COLUMN "status" BOOLEAN DEFAULT true NOT NULL;

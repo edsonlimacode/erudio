@@ -2,10 +2,15 @@ package com.erudio.controller;
 
 
 import com.erudio.controller.swagger.PersonControllerDoc;
+import com.erudio.data.tdo.CustomPageResponse;
 import com.erudio.data.tdo.PersonDto;
 import com.erudio.model.Person;
 import com.erudio.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +60,29 @@ public class PersonController implements PersonControllerDoc {
         return ResponseEntity.ok(personList);
     }
 
+    @GetMapping(value = "/with/pagination", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<CustomPageResponse<PersonDto>> findAllPaginate(
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "15") Integer size,
+            @RequestParam(name = "direction", defaultValue = "asc") String direction) {
+
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "id"));
+
+        Page<Person> allPersonPaginated = personService.getAllPaginate(pageable);
+
+        var personsListDto = allPersonPaginated.map(person -> {
+            var personDtoResult = parseObject(person, PersonDto.class);
+            addHateoasLinks(personDtoResult);
+
+            return personDtoResult;
+        });
+
+        CustomPageResponse<PersonDto> customResponse = new CustomPageResponse<>(personsListDto);
+        return ResponseEntity.ok(customResponse);
+    }
+
 
     @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @Override
@@ -74,6 +102,16 @@ public class PersonController implements PersonControllerDoc {
     public ResponseEntity<?> remove(@PathVariable Long id) {
         personService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/desable/{id}")
+    public void desable(@PathVariable Long id) {
+        personService.disable(id);
+    }
+
+    @PutMapping("/enable/{id}")
+    public void endable(@PathVariable Long id) {
+        personService.enable(id);
     }
 
     private void addHateoasLinks(PersonDto personDto) {

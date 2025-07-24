@@ -49,4 +49,6 @@ public class PersonDto extends RepresentationModel<PersonDto> {
     private Date createdAt;
 
     private List<Book> books;
+
+    private boolean status;
 }

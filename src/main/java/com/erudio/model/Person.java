@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity(name = "persons")
+@Entity
+@Table(name = "persons")
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -36,4 +37,6 @@ public class Person {
     @OneToMany(mappedBy = "person")
     @JsonManagedReference
     private List<Book> books = new ArrayList<>();
+
+    private boolean status;
 }
