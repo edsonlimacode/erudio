@@ -3,11 +3,15 @@ package com.erudio.controller;
 
 import com.erudio.controller.swagger.BookControllerDoc;
 import com.erudio.data.tdo.BookDto;
+import com.erudio.data.tdo.CustomPageResponse;
 import com.erudio.model.Book;
 import com.erudio.model.Person;
 import com.erudio.service.BookService;
 import com.erudio.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +51,26 @@ public class BookController implements BookControllerDoc {
         var bookDto = parseListObject(bookService.findAll(), BookDto.class);
 
         return ResponseEntity.ok(bookDto);
+    }
+
+    @GetMapping("/with/pagination")
+    public ResponseEntity<CustomPageResponse<BookDto>> findAllPaginate(
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "15") Integer size,
+            @RequestParam(name = "direction", defaultValue = "asc") String direction
+    ) {
+
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "id"));
+
+        var allBooksPaged = bookService.findAll(pageable);
+
+        var bookDtoList = allBooksPaged.map(book -> parseObject(book, BookDto.class));
+
+        var customPageResponse = new CustomPageResponse<>(bookDtoList);
+
+        return ResponseEntity.ok(customPageResponse);
     }
 
     @GetMapping("{id}")
