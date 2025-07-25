@@ -1,6 +1,8 @@
 package com.erudio.respository;
 
 import com.erudio.model.Person;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +19,5 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     @Query("UPDATE Person p SET p.status = false WHERE p.id = :id")
     void disbalePerson(@Param("id") Long id);
 
+    Page<Person> findByfirstNameContainingIgnoreCase(@Param("firstName") String firstName, Pageable pageable);
 }

@@ -29,6 +29,10 @@ public class PersonService {
         return personRepository.findAll(pageable);
     }
 
+    public Page<Person> findByFirstName(String firstName, Pageable pageable) {
+        return personRepository.findByfirstNameContainingIgnoreCase(firstName, pageable);
+    }
+
     public Person findById(Long id) {
         return personRepository.findById(id).orElseThrow(() -> new NotFoundExecption("Person not found!"));
     }

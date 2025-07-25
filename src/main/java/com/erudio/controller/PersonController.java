@@ -1,6 +1,5 @@
 package com.erudio.controller;
 
-
 import com.erudio.controller.swagger.PersonControllerDoc;
 import com.erudio.data.tdo.CustomPageResponse;
 import com.erudio.data.tdo.PersonDto;
@@ -71,6 +70,30 @@ public class PersonController implements PersonControllerDoc {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "id"));
 
         Page<Person> allPersonPaginated = personService.getAllPaginate(pageable);
+
+        var personsListDto = allPersonPaginated.map(person -> {
+            var personDtoResult = parseObject(person, PersonDto.class);
+            addHateoasLinks(personDtoResult);
+
+            return personDtoResult;
+        });
+
+        CustomPageResponse<PersonDto> customResponse = new CustomPageResponse<>(personsListDto);
+        return ResponseEntity.ok(customResponse);
+    }
+
+    @GetMapping(value = "/search/by-name/{firstName}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<CustomPageResponse<PersonDto>> findAllPaginate(
+            @PathVariable("firstName") String firstName,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "size", defaultValue = "15") Integer size,
+            @RequestParam(name = "direction", defaultValue = "asc") String direction) {
+
+        var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "id"));
+
+        Page<Person> allPersonPaginated = personService.findByFirstName(firstName, pageable);
 
         var personsListDto = allPersonPaginated.map(person -> {
             var personDtoResult = parseObject(person, PersonDto.class);
