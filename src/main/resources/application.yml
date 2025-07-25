@@ -7,7 +7,7 @@ servlet:
     max-file-size: 200MB
     max-request-size: 215MB
 file:
-  updloadDir: /home/edson/Imagens/spring/upload
+  uploadDir: /home/edson/Imagens/spring/upload
 spring:
   application:
     name: erudio
